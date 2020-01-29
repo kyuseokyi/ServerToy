@@ -4,7 +4,7 @@ const server = require('./server');
 
 var map = {};
 
-class distrubutor extends server {
+class distriubutor extends server {
     constructor() {
         super("distributor", 9000, ["POST/distributes", "GET/distrbutes"]);
     }
@@ -67,4 +67,4 @@ class distrubutor extends server {
     }
 }
 
-new distrubutor();
+new distriubutor();
