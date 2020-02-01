@@ -1,21 +1,24 @@
-'use strict';
 
-const server = require('./server');
-
+'use strict'
+/*
+* distributor
+*/
+// 접속 노드 관리 오브젝트
 var map = {};
 
-class distriubutor extends server {
+// Server 클래스 상속
+class distributor extends require('./server.js') {
     constructor() {
-        super("distributor", 9000, ["POST/distributes", "GET/distrbutes"]);
+        super("distributor", 9000, ["POST/distributes", "GET/distributes"]);
     }
 
-    //노드 접속 이벤트 처리.
+    // 노드 접속 이벤트 처리
     onCreate(socket) {
         console.log("onCreate", socket.remoteAddress, socket.remotePort);
         this.sendInfo(socket);
     }
 
-    //노드 접속 해제 이벤트 처리.
+    // 노드 접속 해제 이벤트 처리
     onClose(socket) {
         var key = socket.remoteAddress + ":" + socket.remotePort;
         console.log("onClose", socket.remoteAddress, socket.remotePort);
@@ -23,35 +26,35 @@ class distriubutor extends server {
         this.sendInfo();
     }
 
-    //노드 등록 처리
+    // 노드 등록 처리
     onRead(socket, json) {
         var key = socket.remoteAddress + ":" + socket.remotePort;
         console.log("onRead", socket.remoteAddress, socket.remotePort, json);
 
-        if (json.uri === "/distributes" && json.method === "POST") {
+        if (json.uri == "/distributes" && json.method == "POST") {
             map[key] = {
                 socket: socket
             };
-
             map[key].info = json.params;
             map[key].info.host = socket.remoteAddress;
+
             this.sendInfo();
         }
     }
 
-    //패킷 전송
+    // 패킷 전송
     write(socket, packet) {
         socket.write(JSON.stringify(packet) + '¶');
     }
 
-    // 노드 접속 또는 특정 소켓에 노드 접속 정보 전파
+    // 접속 노드 혹은 특정 소켓에 접속 노드 정보 전파
     sendInfo(socket) {
         var packet = {
-            uri: "/distrubutes",
+            uri: "/distributes",
             method: "GET",
             key: 0,
             params: []
-        }
+        };
 
         for (var n in map) {
             packet.params.push(map[n].info);
@@ -59,7 +62,8 @@ class distriubutor extends server {
 
         if (socket) {
             this.write(socket, packet);
-        } else {
+        }
+        else {
             for (var n in map) {
                 this.write(map[n].socket, packet);
             }
@@ -67,4 +71,5 @@ class distriubutor extends server {
     }
 }
 
-new distriubutor();
+// distributor 객체 생성
+new distributor();

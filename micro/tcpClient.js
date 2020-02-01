@@ -4,7 +4,7 @@
 const net = require('net')
 
 //Define TcpClient Server
-class tcpclient {
+class tcpClient {
     constructor(host, port, onCreate, onRead, onEnd, onError) {
         this.options = {
             host: host,

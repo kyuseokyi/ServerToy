@@ -1,3 +1,4 @@
+
 const http = require('http');
 
 var options = {
@@ -6,18 +7,19 @@ var options = {
     headers: {
         'Content-Type': 'application/json'
     }
-}
+};
 
-function request (cb, params) {
+
+function request(cb, params) {
     var req = http.request(options, (res) => {
         var data = "";
-        res.on('data', chunk => {
-           data += chunk;
+        res.on('data', (chunk) => {
+            data += chunk;
         });
 
         res.on('end', () => {
-           console.log(options, data);
-           cb();
+            console.log(options, data);
+            cb();
         });
     });
 
@@ -28,16 +30,19 @@ function request (cb, params) {
     req.end();
 }
 
+
 /**
- * 상품관리 api 테스트
- * @param callback
+ * 상품 관리 API 테스트
  */
+
 function goods(callback) {
     goods_post(() => {
-       goods_get(() => {
-          goods_delete(callback);
-       });
+        goods_get(() => {
+            goods_delete(callback);
+        });
     });
+
+
 
     function goods_post(cb) {
         options.method = "POST";
@@ -47,7 +52,7 @@ function goods(callback) {
             category: "tests",
             price: 1000,
             description: "test"
-        })
+        });
     }
 
     function goods_get(cb) {
@@ -64,23 +69,25 @@ function goods(callback) {
 }
 
 /**
- * 회원 관리 api 테스트
- * @param callback
+ * 회원 관리 API 테스트
  */
 function members(callback) {
+
     members_delete(() => {
-       members_post(() => {
-           members_get(callback);
-       });
+        members_post(() => {
+            members_get(callback);
+        });
     });
+
+
 
     function members_post(cb) {
         options.method = "POST";
         options.path = "/members";
         request(cb, {
-           username: "test_account",
-           password: "1234",
-           passwordConfirm: "1234"
+            username: "test_account",
+            password: "1234",
+            passwordConfirm: "1234"
         });
     }
 
@@ -98,10 +105,10 @@ function members(callback) {
 }
 
 /**
- * 회원 관리 api 테스트
- * @param callback
+ *  구매 관리 API 테스트
  */
 function purchases(callback) {
+
     purchases_post(() => {
         purchases_get(() => {
             callback();
@@ -112,7 +119,7 @@ function purchases(callback) {
         options.method = "POST";
         options.path = "/purchases";
         request(cb, {
-            userid: 1,
+            userid: 10,
             goodsid: 1
         });
     }
@@ -124,13 +131,13 @@ function purchases(callback) {
     }
 }
 
-console.log("================= members ==================");
+console.log("============================== members ==============================");
 members(() => {
-    console.log("================= goods ==================");
+    console.log("============================== goods ==============================");
     goods(() => {
-        console.log("================= purchases ==================");
+        console.log("============================== purchases ==============================");
         purchases(() => {
-           console.log("done")
+            console.log("done");
         });
     });
 });
