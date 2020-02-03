@@ -1,7 +1,7 @@
 const http = require('http');
 const url = require('url');
 const querystring = require('querystring');
-const tcpClient = require('../tcpClient')
+const tcpClient = require('../tcpClient');
 
 var mapClients = {};
 var mapUrls = {};

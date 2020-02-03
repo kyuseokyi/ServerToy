@@ -10,7 +10,7 @@ class tcpServer {
             port: port,
             name: name,
             urls: urls
-        }
+        };
 
         this.merge = {};
 
@@ -72,7 +72,7 @@ class tcpServer {
             method: "POST",
             key: 0,
             params: this.context
-        }
+        };
 
         var isConnectedDistributor = false;
 
