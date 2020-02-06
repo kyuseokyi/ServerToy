@@ -47,7 +47,7 @@ function register (method, pathname, params, cb) {
         response.errormessage = "Invalid Parameters";
         cb(response);
     } else {
-        // query를 이용하여 상품 검색전 redis에서 상품 정보가 있는지 확인. 
+        // query를 이용하여 상품 검색전 redis에서 상품 정보가 있는지 확인.
         redis.get(params.goodsid, (err, result) => {
             if (err || result == null) {
                 response.errorcode = 1;
