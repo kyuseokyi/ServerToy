@@ -36,7 +36,7 @@ var server = http.createServer((req, res) => {
     } else {
         onRequest(res, method, pathname, uri.query);
     }
-}).listen(8000);
+}).listen(8002);
 
 /**
  * 요청에 대해 회원관리, 상품관리, 구매관리 모듈별로 분기.
@@ -52,7 +52,7 @@ function onRequest (res, method, pathname, params) {
         case "/members":
             members.onRequest(res, method, pathname, params, response);
             break;
-        case "/godds":
+        case "/goods":
             goods.onRequest(res, method, pathname, params, response);
             break;
         case "/purchases":

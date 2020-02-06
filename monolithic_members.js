@@ -4,7 +4,7 @@ const conn = {
     user: 'micro',
     password: 'rbtjrl79',
     database: 'monolithic'
-}
+};
 
 /**
  * 회원 관리의 각 기능별로 분기.

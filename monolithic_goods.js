@@ -3,8 +3,15 @@ const conn = {
     host: '35.221.122.70',
     user: 'micro',
     password: 'rbtjrl79',
-    database: 'monolithic'
-}
+    database: 'monolithic',
+    multipleStatements: true
+};
+
+const redis = require('redis').createClient();
+
+redis.on("error", function (err) {
+    console.log("Redis Error " + err);
+});
 
 /**
  * 상품 관리의 각 기능별로 분기
@@ -21,7 +28,7 @@ exports.onRequest = function (res, method, pathname, params, cb) {
         default:
             return process.nextTick(cb, res, null);
     }
-}
+};
 
 /**
  * 상품 등록 기능
@@ -44,12 +51,15 @@ function register(method, pathname, params, cb) {
     } else {
         var connection = mysql.createConnection(conn);
         connection.connect();
-        connection.query("insert into goods(name, category, price, description) values(? ,? ,? ,?)"
+        connection.query("insert into goods(name, category, price, description) values(? ,? ,? ,?); select LAST_INSERT_ID() as id"
             , [params.name, params.category, params.price, params.description]
             , (error, results, fields) => {
                 if (error) {
                     response.errorcode = 1;
                     response.errormessage = error;
+                } else {
+                    const id = results[1][0].id;
+                    redis.set(id, JSON.stringify(params));
                 }
                 cb(response);
             });
@@ -113,6 +123,8 @@ function unregister(method, pathname, params, cb) {
                 if (error) {
                     response.errorcode = 1;
                     response.errormessage = error;
+                } else {
+                    redis.del(params.id);
                 }
                 cb(response);
             });

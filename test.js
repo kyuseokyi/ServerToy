@@ -3,7 +3,7 @@ const http = require('http');
 
 var options = {
     host: "127.0.0.1",
-    port: 8000,
+    port: 8002,
     headers: {
         'Content-Type': 'application/json'
     }
@@ -48,7 +48,7 @@ function goods(callback) {
         options.method = "POST";
         options.path = "/goods";
         request(cb, {
-            name: "test Goods",
+            name: "test_Goods",
             category: "tests",
             price: 1000,
             description: "test"
